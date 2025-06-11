@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Гадание Таро</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --dark-purple: #0d0419;
+            --deep-purple: #1a0a2e;
+            --accent-purple: #4a1d7a;
+            --light-purple: #7d4ca5;
+            --gold: #c9a227;
+            --antique-gold: #b88a2d;
+            --silver: #a7a7a7;
+            --ivory: #f8f4e8;
+            --text-light: #e6d9f2;
+            --text-lighter: #ffffff;
+            --velvet: #0f0522;
+        }
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--velvet);
+            color: var(--text-light);
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 30px;
+            line-height: 1.6;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(74, 29, 122, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(74, 29, 122, 0.1) 0%, transparent 20%),
+                linear-gradient(to bottom, var(--velvet), var(--dark-purple));
+            background-attachment: fixed;
+        }
+        
+        h1, h2, h3 {
+            font-family: 'Cinzel Decorative', serif;
+            text-align: center;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        
+        h1 {
+            margin-bottom: 50px;
+            font-size: 3.2em;
+            color: var(--antique-gold);
+            letter-spacing: 3px;
+            position: relative;
+            padding-bottom: 20px;
+            text-transform: uppercase;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(201, 162, 39, 0.5);
+        }
+        
+        h2 {
+            margin: 40px 0;
+            font-size: 2.4em;
+            color: var(--light-purple);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            position: relative;
+            padding-bottom: 15px;
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--light-purple), transparent);
+        }
+        
+        h3 {
+            color: var(--silver);
+            margin-top: 0;
+            font-size: 1.8em;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+        
+        .form-container {
+            background: rgba(26, 10, 46, 0.8);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.7);
+            margin-bottom: 50px;
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            backdrop-filter: blur(10px);
+            transition: transform 0.5s ease, box-shadow 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(201, 162, 39, 0) 0%,
+                rgba(201, 162, 39, 0) 45%,
+                rgba(201, 162, 39, 0.03) 48%,
+                rgba(201, 162, 39, 0.05) 50%,
+                rgba(201, 162, 39, 0.03) 52%,
+                rgba(201, 162, 39, 0) 55%,
+                rgba(201, 162, 39, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 8s infinite linear;
+        }
+        
+        .form-container:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            color: var(--silver);
+            font-size: 1.1em;
+            letter-spacing: 0.5px;
+        }
+        
+        input, button, textarea {
+            width: 100%;
+            padding: 16px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            font-family: 'Montserrat', sans-serif;
+            transition: all 0.3s ease;
+            background: rgba(15, 5, 34, 0.8);
+            color: var(--ivory);
+            border: 1px solid rgba(125, 76, 165, 0.4);
+        }
+        
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--light-purple);
+            box-shadow: 0 0 0 3px rgba(74, 29, 122, 0.5);
+            background: rgba(26, 10, 46, 0.7);
+        }
+        
+        input::placeholder {
+            color: rgba(248, 244, 232, 0.4);
+            font-style: italic;
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--accent-purple), var(--light-purple));
+            color: var(--ivory);
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1.1em;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            box-shadow: 0 8px 20px rgba(74, 29, 122, 0.5);
+            transition: all 0.4s ease;
+        }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--light-purple), var(--accent-purple));
+            transition: all 0.6s ease;
+            z-index: -1;
+        }
+        
+        button:hover::before {
+            left: 0;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(74, 29, 122, 0.7);
+            color: var(--text-lighter);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        .cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+            margin: 50px 0;
+            perspective: 1000px;
+        }
+        
+        .card-wrapper {
+            width: 220px;
+            text-align: center;
+            position: relative;
+            transition: all 0.5s ease;
+            transform-style: preserve-3d;
+        }
+        
+        .card-wrapper:hover {
+            transform: translateY(-15px) rotateY(5deg);
+        }
+        
+        .card-image {
+            width: 100%;
+            height: 360px;
+            object-fit: cover;
+            border-radius: 12px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.6);
+            border: 3px solid var(--antique-gold);
+            transition: all 0.5s ease;
+        }
+        
+        .card-wrapper:hover .card-image {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8);
+            border-color: var(--gold);
+        }
+        
+        .card-image.reversed {
+            transform: rotate(180deg);
+        }
+        
+        .card-name {
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 1.3em;
+            color: var(--gold);
+            transition: all 0.3s ease;
+            letter-spacing: 0.5px;
+        }
+        
+        .card-wrapper:hover .card-name {
+            text-shadow: 0 0 12px rgba(201, 162, 39, 0.8);
+            color: var(--text-lighter);
+        }
+        
+        .card-position {
+            font-style: italic;
+            color: var(--silver);
+            margin-top: 10px;
+            font-size: 0.95em;
+            letter-spacing: 0.5px;
+        }
+        
+        .reversed-mark {
+            color: #d45d5d;
+            font-weight: bold;
+            text-shadow: 0 0 8px rgba(212, 93, 93, 0.4);
+        }
+        
+        .prediction {
+            background: rgba(26, 10, 46, 0.8);
+            padding: 40px;
+            border-radius: 16px;
+            margin-top: 50px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+            border-left: 5px solid var(--antique-gold);
+            backdrop-filter: blur(10px);
+            animation: fadeIn 1.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .prediction::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                transparent 0%,
+                rgba(201, 162, 39, 0.03) 50%,
+                transparent 100%
+            );
+            pointer-events: none;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .prediction p {
+            margin-bottom: 25px;
+            font-size: 1.15em;
+            line-height: 1.8;
+            letter-spacing: 0.3px;
+        }
+        
+        .prediction ul {
+            padding-left: 30px;
+            margin-bottom: 25px;
+        }
+        
+        .prediction li {
+            margin-bottom: 15px;
+            position: relative;
+            font-size: 1.1em;
+        }
+        
+        .prediction li::before {
+            content: '❖';
+            color: var(--light-purple);
+            position: absolute;
+            left: -25px;
+            font-size: 0.9em;
+        }
+        
+        .error {
+            color: #d45d5d;
+            padding: 25px;
+            background: rgba(15, 5, 34, 0.9);
+            border: 1px solid #d45d5d;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+            animation: pulse 2.5s infinite;
+            box-shadow: 0 5px 20px rgba(212, 93, 93, 0.2);
+            letter-spacing: 0.5px;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(212, 93, 93, 0.3); }
+            70% { box-shadow: 0 0 0 15px rgba(212, 93, 93, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(212, 93, 93, 0); }
+        }
+        
+        .question-block {
+            background: rgba(74, 29, 122, 0.25);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            font-style: italic;
+            border-left: 5px solid var(--light-purple);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .question-block::before {
+            content: '“';
+            position: absolute;
+            top: -30px;
+            left: 15px;
+            font-size: 100px;
+            color: rgba(125, 76, 165, 0.1);
+            font-family: serif;
+            line-height: 1;
+            z-index: 0;
+        }
+        
+        .question-block strong {
+            color: var(--gold);
+            font-weight: 500;
+            position: relative;
+        }
+        
+        .advice-block {
+            background: rgba(15, 5, 34, 0.9);
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 40px;
+            border-left: 5px solid var(--antique-gold);
+            position: relative;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        .advice-block::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(135deg, transparent, rgba(201, 162, 39, 0.08), transparent);
+            pointer-events: none;
+        }
+        
+        .advice-title {
+            font-weight: bold;
+            color: var(--gold);
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            letter-spacing: 1px;
+        }
+        
+        .advice-title::before {
+            content: '✧';
+            margin-right: 15px;
+            color: var(--light-purple);
+            font-size: 1.2em;
+        }
+        
+        .card-of-day-container {
+            margin: 60px 0;
+            text-align: center;
+            position: relative;
+        }
+        
+        .card-of-day-container::before, 
+        .card-of-day-container::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--light-purple), transparent);
+        }
+        
+        .card-of-day-container::before {
+            left: 0;
+        }
+        
+        .card-of-day-container::after {
+            right: 0;
+        }
+        
+        .card-of-day-btn {
+            background: linear-gradient(135deg, var(--accent-purple), var(--light-purple));
+            width: auto;
+            display: inline-block;
+            padding: 18px 40px;
+            margin: 20px 0;
+            border-radius: 50px;
+            font-size: 1.2em;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(74, 29, 122, 0.5);
+            transition: all 0.4s ease;
+        }
+        
+        .card-of-day-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(74, 29, 122, 0.7);
+        }
+        
+        .card-of-day-btn::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                to bottom right,
+                rgba(255, 255, 255, 0) 0%,
+                rgba(255, 255, 255, 0) 45%,
+                rgba(255, 255, 255, 0.2) 48%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0.2) 52%,
+                rgba(255, 255, 255, 0) 55%,
+                rgba(255, 255, 255, 0) 100%
+            );
+            transform: rotate(30deg);
+            animation: shine 4s infinite ease-in-out;
+        }
+        
+        @keyframes shine {
+            0% { left: -50%; top: -50%; }
+            100% { left: 150%; top: 150%; }
+        }
+        
+        .card-of-day-title {
+            color: var(--gold);
+            font-size: 2em;
+            margin-bottom: 25px;
+            position: relative;
+            display: inline-block;
+            letter-spacing: 2px;
+        }
+        
+        .card-of-day-title::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: var(--light-purple);
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(125, 76, 165, 0.5);
+        }
+        
+        /* Анимация загрузки */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(8, 3, 17, 0.98);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            display: none;
+            backdrop-filter: blur(8px);
+        }
+        
+        .loading-content {
+            text-align: center;
+            position: relative;
+        }
+        
+        .loading-spinner {
+            width: 150px;
+            height: 230px;
+            perspective: 1000px;
+            margin: 0 auto;
+        }
+        
+        .spinning-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            animation: rotateCard 3s infinite ease-in-out;
+        }
+        
+        .spinning-card .front, 
+        .spinning-card .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+            border: 4px solid var(--antique-gold);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .spinning-card .front {
+            background: linear-gradient(135deg, #2a1051, #1a0a2e);
+            transform: rotateY(0deg);
+        }
+        
+        .spinning-card .front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at center, transparent 60%, rgba(201, 162, 39, 0.1) 100%);
+        }
+        
+        .spinning-card .front img,
+        .spinning-card .back img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .spinning-card .back {
+            background: linear-gradient(135deg, #1a0a2e, #0d0519);
+            transform: rotateY(180deg);
+        }
+        
+        .spinning-card .back::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            right: 15px;
+            bottom: 15px;
+            border: 3px solid rgba(201, 162, 39, 0.3);
+            border-radius: 10px;
+        }
+        
+        @keyframes rotateCard {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+        
+        .loading-text {
+            color: var(--ivory);
+            margin-top: 30px;
+            font-size: 1.4em;
+            text-align: center;
+            text-shadow: 0 3px 6px rgba(0, 0, 0, 0.7);
+            position: relative;
+            letter-spacing: 1px;
+        }
+        
+        .loading-text::after {
+            content: '...';
+            position: absolute;
+            animation: dots 1.8s infinite steps(4, end);
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+        
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite ease-in-out;
+            opacity: 0;
+        }
+        
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: var(--opacity); transform: scale(1); }
+        }
+        
+        .moon {
+            position: fixed;
+            top: 10%;
+            right: 10%;
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #f5f7fa, #c0c0c0);
+            border-radius: 50%;
+            box-shadow: 0 0 40px rgba(245, 247, 250, 0.4);
+            z-index: -1;
+            opacity: 0.15;
+            filter: blur(1px);
+        }
+        
+        .moon::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 25px;
+            height: 25px;
+            background: rgba(15, 5, 34, 0.9);
+            border-radius: 50%;
+            box-shadow: 
+                40px -15px 0 8px rgba(15, 5, 34, 0.9),
+                20px -35px 0 5px rgba(15, 5, 34, 0.9),
+                50px 15px 0 10px rgba(15, 5, 34, 0.9);
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2.5em;
+            }
+            
+            .form-container {
+                padding: 25px;
+            }
+            
+            .card-wrapper {
+                width: 160px;
+            }
+            
+            .card-image {
+                height: 280px;
+            }
+            
+            .card-of-day-container::before, 
+            .card-of-day-container::after {
+                width: 20%;
+            }
+            
+            .prediction {
+                padding: 25px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Фоновые элементы -->
+    <div class="stars" id="stars"></div>
+    <div class="moon"></div>
+    
+    <h1>ТАЙНЫ ТАРО</h1>
+    
+    <!-- Оверлей загрузки -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="loading-spinner">
+                <div class="spinning-card">
+                    <div class="front">
+                        <img src="media/tarot_cards/major_arcana_sun.png" alt="Таро">
+                    </div>
+                    <div class="back">
+                        <img src="media/tarot_cards/back.jpg" alt="Магический шар">
+                    </div>
+                </div>
+            </div>
+            <div class="loading-text">Обращаюсь к картам</div>
+        </div>
+    </div>
+    
+    {% if error %}
+    <div class="error">
+        {{ error }}
+    </div>
+    {% endif %}
+    
+    <div class="card-of-day-container">
+        <h3 class="card-of-day-title">Карта дня</h3>
+        <form method="post" action="" id="cardOfDayForm">
+            {% csrf_token %}
+            <input type="hidden" name="card_of_day" value="true">
+            <button type="submit" class="card-of-day-btn">Узнать карту дня</button>
+        </form>
+    </div>
+    
+    <div class="form-container">
+        <form method="post" id="tarotForm">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="question">Ваш вопрос:</label>
+                <input type="text" id="question" name="question" placeholder="Задайте вопрос Вселенной..." required value="{{ question|default:'' }}">
+            </div>
+            <div class="form-group">
+                <label for="cards-number">Количество карт (1-5):</label>
+                <input type="number" id="cards-number" name="cards-number" min="1" max="5" value="3" required>
+            </div>
+            <button type="submit" id="submitBtn">Получить предсказание</button>
+        </form>
+    </div>
+
+    {% if card_of_day %}
+    <div class="result-container">
+        <h2>Ваша карта дня</h2>
+        
+        <div class="cards-container">
+            <div class="card-wrapper">
+                <img src="{{ card_of_day.card.image.url }}" 
+                     alt="{{ card_of_day.card.name }}"
+                     class="card-image {% if card_of_day.reversed %}reversed{% endif %}">
+                <div class="card-name">{{ card_of_day.card.name }}</div>
+                <div class="card-position">
+                    {% if card_of_day.reversed %}
+                        <span class="reversed-mark">Перевернутая</span>
+                    {% else %}
+                        Прямая
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <div class="prediction">
+            <h3>Толкование карты дня:</h3>
+            <div>{{ card_of_day_prediction|safe }}</div>
+            
+            <div class="advice-block">
+                <div class="advice-title">Совет на сегодня</div>
+                <p>{{ card_of_day_advice|default:"Прислушайтесь к своей интуиции сегодня." }}</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if cards %}
+    <div class="result-container">
+        <h2>Ваш расклад</h2>
+        
+        <div class="question-block">
+            <strong>Ваш вопрос:</strong> "{{ question }}"
+        </div>
+        
+        <div class="cards-container">
+            {% for card in cards %}
+            <div class="card-wrapper">
+                <img src="{{ card.card.image.url }}" 
+                     alt="{{ card.card.name }}"
+                     class="card-image {% if card.reversed %}reversed{% endif %}">
+                <div class="card-name">{{ card.card.name }}</div>
+                <div class="card-position">
+                    {% if card.reversed %}
+                        <span class="reversed-mark">Перевернутая</span>
+                    {% else %}
+                        Прямая
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="prediction">
+            <h3>Толкование расклада:</h3>
+            <div>{{ prediction|safe }}</div>
+            
+            <div class="advice-block">
+                <div class="advice-title">Практический совет</div>
+                {% if advice %}
+                    <p>{{ advice }}</p>
+                {% else %}
+                    <p>Рассмотрите возможность проявить гибкость в текущей ситуации.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <script>
+        // Создание звездного фона
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            const starsCount = 150;
+            
+            for (let i = 0; i < starsCount; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                
+                // Случайные параметры звезды
+                const size = Math.random() * 4;
+                const posX = Math.random() * 100;
+                const posY = Math.random() * 100;
+                const opacity = Math.random() * 0.9 + 0.1;
+                const duration = Math.random() * 4 + 3;
+                const delay = Math.random() * 6;
+                
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.left = `${posX}%`;
+                star.style.top = `${posY}%`;
+                star.style.setProperty('--opacity', opacity);
+                star.style.setProperty('--duration', `${duration}s`);
+                star.style.animationDelay = `${delay}s`;
+                
+                starsContainer.appendChild(star);
+            }
+        }
+        
+        // Показываем анимацию загрузки при отправке формы
+        document.getElementById('tarotForm').addEventListener('submit', function() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        });
+        
+        document.getElementById('cardOfDayForm').addEventListener('submit', function() {
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        });
+        
+        // Если страница загружается с результатами (например, после обновления)
+        // скрываем анимацию загрузки
+        window.addEventListener('load', function() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+            createStars();
+        });
+        
+        // Анимация при наведении на карты
+        const cardWrappers = document.querySelectorAll('.card-wrapper');
+        cardWrappers.forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const angleY = (x - centerX) / 25;
+                const angleX = (centerY - y) / 25;
+                
+                card.style.transform = `perspective(1000px) rotateX(${angleX}deg) rotateY(${angleY}deg) translateY(-15px)`;
+                card.style.boxShadow = `${-angleY * 3}px ${angleX * 3}px 40px rgba(0, 0, 0, 0.5)`;
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0)';
+                card.style.boxShadow = '0 15px 30px rgba(0, 0, 0, 0.6)';
+            });
+        });
+    </script>
+</body>
+</html>
